@@ -1,13 +1,14 @@
-package com.ciklum.model;
+package com.ciklum.model.element;
 
-public final class Scissors extends Element {
+public final class Rock extends Element {
 
+    public static final int ELEMENT_ID = 0;
 
     @Override 
     public int hashCode() {
-        return 1;
+        return ELEMENT_ID;
     }
-    
+
     /**
      * Here the lower element will be the winner,
      *  e.g. when returning -1.
@@ -17,16 +18,15 @@ public final class Scissors extends Element {
         if (this.equals(element)) {
             return 0;
         }
-        if (element instanceof Rock) {
+        if (element instanceof Paper) {
             return 1;
         } else {
             return -1;
         }
     }
 
-    
     @Override
     public String toString() {
-        return "Scissors";
+        return "Rock";
     }
 }

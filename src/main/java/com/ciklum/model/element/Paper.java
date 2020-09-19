@@ -1,10 +1,13 @@
-package com.ciklum.model;
+package com.ciklum.model.element;
 
-public final class Rock extends Element {
+public final class Paper extends Element {
+
+
+    public static final int ELEMENT_ID = 2;
 
     @Override 
     public int hashCode() {
-        return 0;
+        return ELEMENT_ID;
     }
 
     /**
@@ -16,7 +19,7 @@ public final class Rock extends Element {
         if (this.equals(element)) {
             return 0;
         }
-        if (element instanceof Paper) {
+        if (element instanceof Scissors) {
             return 1;
         } else {
             return -1;
@@ -25,6 +28,6 @@ public final class Rock extends Element {
 
     @Override
     public String toString() {
-        return "Rock";
+        return "Paper";
     }
 }

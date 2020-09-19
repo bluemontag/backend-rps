@@ -1,4 +1,4 @@
-package com.ciklum.model;
+package com.ciklum.model.element;
 
 /**
  * The abstract element (Rock, Paper, Scissors or others...)

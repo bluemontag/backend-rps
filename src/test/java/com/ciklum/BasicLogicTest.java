@@ -2,8 +2,9 @@ package com.ciklum;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.ciklum.model.*;
-import com.ciklum.utils.*;
+import com.ciklum.model.player.*;
+import com.ciklum.model.game.*;
+import com.ciklum.model.element.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,16 +26,16 @@ public class BasicLogicTest {
     public void rockBeatsScissorsTest() {
 
         Player p1 = new Player("Juan", new Rock());
-
         Player p2 = new Player("Pedro", new Scissors());
+        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
 
-        Either<Player, Tie> outcome = p1.playWith(p2);
+        RoundResult result = game.playRound();
 
         // there must be a winner
-        assertTrue(outcome.getLeft().isPresent(), "There is not a winner");
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
         
         // and must be p1
-        assertEquals(outcome.getLeft().get(), p1, "There is a problem with the outcome");
+        assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
 
         System.out.println("The test rockBeatsScissorsTest finished ok.");
     }
@@ -43,16 +44,16 @@ public class BasicLogicTest {
     public void scissorsIsBeatenByRockTest() {
 
         Player p1 = new Player("Juan", new Scissors());
-
         Player p2 = new Player("Pedro", new Rock());
+        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
 
-        Either<Player, Tie> outcome = p1.playWith(p2);
+        RoundResult result = game.playRound();
 
         // there must be a winner
-        assertTrue(outcome.getLeft().isPresent(), "There is not a winner");
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
         
         // and must be p1
-        assertEquals(outcome.getLeft().get(), p2, "There is a problem with the outcome");
+        assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
 
         System.out.println("The test scissorsIsBeatenByRockTest finished ok.");
     }
@@ -61,15 +62,15 @@ public class BasicLogicTest {
     public void paperBeatsRockTest() {
 
         Player p1 = new Player("Juan", new Paper());
-
         Player p2 = new Player("Pedro", new Rock());
+        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
 
-        Either<Player, Tie> outcome = p1.playWith(p2);
+        RoundResult result = game.playRound();
         // there must be a winner
-        assertTrue(outcome.getLeft().isPresent(), "There is not a winner");
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
         
         // and must be p1
-        assertEquals(outcome.getLeft().get(), p1, "There is a problem with the outcome");
+        assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
 
         System.out.println("The test paperBeatsRockTest finished ok.");
     }
@@ -78,16 +79,16 @@ public class BasicLogicTest {
     public void rockIsBeatenByPaperTest() {
 
         Player p1 = new Player("Juan", new Rock());
-
         Player p2 = new Player("Pedro", new Paper());
+        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
 
-        Either<Player, Tie> outcome = p1.playWith(p2);
+        RoundResult result = game.playRound();
 
         // there must be a winner
-        assertTrue(outcome.getLeft().isPresent(), "There is not a winner");
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
         
         // and must be p1
-        assertEquals(outcome.getLeft().get(), p2, "There is a problem with the outcome");
+        assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
 
         System.out.println("The test rockIsBeatenByPaperTest finished ok.");
     }
@@ -96,16 +97,16 @@ public class BasicLogicTest {
     public void scissorsBeatsPaperTest() {
 
         Player p1 = new Player("Juan", new Scissors());
-
         Player p2 = new Player("Pedro", new Paper());
+        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
 
-        Either<Player, Tie> outcome = p1.playWith(p2);
+        RoundResult result = game.playRound();
 
         // there must be a winner
-        assertTrue(outcome.getLeft().isPresent(), "There is not a winner");
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
 
         // and must be p1
-        assertEquals(outcome.getLeft().get(), p1, "There is a problem with the outcome");
+        assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
 
         System.out.println("The test scissorsBeatsPaperTest finished ok.");
     }
@@ -114,16 +115,16 @@ public class BasicLogicTest {
     public void paperIsBeatenByScissorsTest() {
 
         Player p1 = new Player("Juan", new Paper());
-
         Player p2 = new Player("Pedro", new Scissors());
+        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
 
-        Either<Player, Tie> outcome = p1.playWith(p2);
+        RoundResult result = game.playRound();
 
         // there must be a winner
-        assertTrue(outcome.getLeft().isPresent(), "There is not a winner");
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
         
         // and must be p1
-        assertEquals(outcome.getLeft().get(), p2, "There is a problem with the outcome");
+        assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
 
         System.out.println("The test paperIsBeatenByScissorsTest finished ok.");
     }
@@ -132,34 +133,29 @@ public class BasicLogicTest {
     public void tieTest() {
 
         Player p1 = new Player("Juan", new Scissors());
-
         Player p2 = new Player("Pedro", new Scissors());
-
-        Either<Player, Tie> outcome = p1.playWith(p2);
-
-        // there must be a tie
-        assertTrue(outcome.getRight().isPresent(), "There is a winner");
-
-        // and the value must be a Tie
-        assertEquals(outcome.getRight().get(), new Tie(), "There is a problem with the outcome");
-
-        p1.chooseNewElement(new Paper());
-        p2.chooseNewElement(new Paper());
+        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        
+        RoundResult result = game.playRound();
 
         // there must be a tie
-        assertTrue(outcome.getRight().isPresent(), "There is a winner");
+        assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
-        // and the value must be a Tie
-        assertEquals(outcome.getRight().get(), new Tie(), "There is a problem with the outcome");
+        p1 = new Player("Juan", new Paper());
+        p2 = new Player("Pedro", new Paper());
 
-        p1.chooseNewElement(new Rock());
-        p2.chooseNewElement(new Rock());
+       result = game.playRound();
 
         // there must be a tie
-        assertTrue(outcome.getRight().isPresent(), "There is a winner");
+        assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
-        // and the value must be a Tie
-        assertEquals(outcome.getRight().get(), new Tie(), "There is a problem with the outcome");
+        p1 = new Player("Juan", new Rock());
+        p2 = new Player("Pedro", new Rock());
+
+       result = game.playRound();
+
+        // there must be a tie
+        assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
         System.out.println("The test tieTest finished ok.");
     }
