@@ -2,7 +2,9 @@ package com.ciklum.model.game;
 
 import java.util.Optional;
 import com.ciklum.model.player.Player;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RoundResult {
     
     private final Player player1;

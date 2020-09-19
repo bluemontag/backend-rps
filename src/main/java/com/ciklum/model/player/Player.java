@@ -1,7 +1,9 @@
 package com.ciklum.model.player;
 
 import com.ciklum.model.element.Element;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Player {
 
     private String name;
@@ -29,7 +31,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player[name=" + this.getName() + ", element=" + this.getElement() + "]";
+        return "Player[name=" + this.getName() + ", element=" + this.getCurrentElement() + "]";
     }
 
     @Override
@@ -50,12 +52,40 @@ public class Player {
         return this.name;
     }
 
-    public Element getElement() {
+    public Element getCurrentElement() {
         return this.currentElement;
     }
 
     public void chooseNewElement() {
         Element e = this.strategy.chooseNewElement();
         this.currentElement = e;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @param currentElement the currentElement to set
+     */
+    public void setCurrentElement(Element currentElement) {
+        this.currentElement = currentElement;
+    }
+
+    /**
+     * @return the strategy
+     */
+    public PlayerStrategy getStrategy() {
+        return strategy;
+    }
+
+    /**
+     * @param strategy the strategy to set
+     */
+    public void setStrategy(PlayerStrategy strategy) {
+        this.strategy = strategy;
     }
 }

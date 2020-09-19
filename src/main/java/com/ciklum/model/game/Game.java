@@ -44,7 +44,7 @@ public class Game {
 
         System.out.println(this.player1.getName() + " is playing with " + this.player2.getName());
 
-        int outcome = this.player1.getElement().compareTo(this.player2.getElement());
+        int outcome = this.player1.getCurrentElement().compareTo(this.player2.getCurrentElement());
         RoundResult result = null;
 
         switch (outcome) {
@@ -56,13 +56,13 @@ public class Game {
 
             case -1:
                 // The first element wins
-                System.out.println(this.player1.getElement() + " beats " + this.player2.getElement());
+                System.out.println(this.player1.getCurrentElement() + " beats " + this.player2.getCurrentElement());
                 result = new RoundResult(this.player1, this.player2, Optional.of(this.player1));
                 break;
 
             case 1:
                 // The second element wins
-                System.out.println(this.player2.getElement() + " beats " + this.player1.getElement());
+                System.out.println(this.player2.getCurrentElement() + " beats " + this.player1.getCurrentElement());
                 result = new RoundResult(this.player1, this.player2, Optional.of(this.player2));
                 break;
 

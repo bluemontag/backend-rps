@@ -6,7 +6,9 @@ import com.ciklum.model.element.Element;
 import com.ciklum.model.element.Paper;
 import com.ciklum.model.element.Rock;
 import com.ciklum.model.element.Scissors;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY)
 public class RandomStrategy implements PlayerStrategy {
     
     private Random rand;
@@ -31,5 +33,10 @@ public class RandomStrategy implements PlayerStrategy {
                 // unexpected behaviour (raise exception or log error)
                 return null;
         }
+    }
+
+    @Override
+    public String getStrategy() {
+        return "Random Strategy";
     }
 }

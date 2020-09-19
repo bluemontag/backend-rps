@@ -1,5 +1,8 @@
 package com.ciklum.model.element;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class Rock extends Element {
 
     public static final int ELEMENT_ID = 0;
@@ -29,4 +32,5 @@ public final class Rock extends Element {
     public String toString() {
         return "Rock";
     }
+
 }

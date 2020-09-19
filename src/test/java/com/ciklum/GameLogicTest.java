@@ -6,7 +6,6 @@ import com.ciklum.model.element.Paper;
 import com.ciklum.model.element.Rock;
 import com.ciklum.model.game.Game;
 import com.ciklum.model.game.GameServer;
-import com.ciklum.model.game.RoundResult;
 import com.ciklum.model.player.Player;
 
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,8 @@
 package com.ciklum.model.element;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class Scissors extends Element {
 
     public static final int ELEMENT_ID = 1;
