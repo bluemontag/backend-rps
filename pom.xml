@@ -13,7 +13,7 @@
 	<artifactId>ciklum-rps</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
-	<name>RockPaperScisors</name>
+	<name>RockPaperScissors</name>
 	<description>Ciklum Code Challenge</description>
 
 	<!-- maven global properties -->

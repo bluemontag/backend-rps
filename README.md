@@ -1,4 +1,4 @@
-# Rock Papers Scisors Game Back-end
+# Rock Papers Scissors Game Back-end
 
 ## Introduction
 
