@@ -21,24 +21,24 @@ public class GameLogicTest {
 
         String user = "Ignacio";
 
-        Player p1 = new Player("Jorge");
-        Player p2 = new Player("Andres");
+        Player p1 = new Player("Jorge", () -> new Rock());
+        Player p2 = new Player("Andres", () -> new Paper());
         GameLogic game = new GameLogic(server, user, p1, p2);
 
         // play 2 rounds with user "Ignacio"
-        game.playRoundWithElements(new Rock(), new Paper());
+        game.playRound();
         assertEquals(1, server.getRoundsPlayedForUser(user), "The number of rounds played should be 1");
-        game.playRoundWithElements(new Rock(), new Paper());
+        game.playRound();
         assertEquals(2, server.getRoundsPlayedForUser(user), "The number of rounds played should be 2");
 
         user = "Javier";
         game = new GameLogic(server, user, p1, p2);
         // play 3 rounds with user "Javier"
-        game.playRoundWithElements(new Rock(), new Paper());
+        game.playRound();
         assertEquals(1, server.getRoundsPlayedForUser(user), "The number of rounds played should be 1");
-        game.playRoundWithElements(new Rock(), new Paper());
+        game.playRound();
         assertEquals(2, server.getRoundsPlayedForUser(user), "The number of rounds played should be 2");
-        game.playRoundWithElements(new Rock(), new Paper());
+        game.playRound();
         assertEquals(3, server.getRoundsPlayedForUser(user), "The number of rounds played should be 3");
 
         // the first user results are not changed:

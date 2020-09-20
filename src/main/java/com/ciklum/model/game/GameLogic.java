@@ -34,12 +34,9 @@ public class GameLogic {
      * Plays a round for the elements e1 and e2,
      *  then adds the result to the server (for the current userName).
      * 
-     * This method is used by some tests that need to pass the elements as parameters,
-     * to ensure the correct logic of the Game.
-     * 
      * @return the result in case you need to test the value from the outside
      */
-    public RoundResult playRoundWithElements(Element e1, Element e2) {
+    private RoundResult playRoundWithElements(Element e1, Element e2) {
 
         logger.info("{} is playing with {}", this.player1.getName(), this.player2.getName());
 
@@ -69,6 +66,8 @@ public class GameLogic {
                 // raise exception or return null (there is some unexpected behaviour)
                 return null;
         }
+
+        // add to the server
         server.addNewResult(this.userName, result);
         
         return result;

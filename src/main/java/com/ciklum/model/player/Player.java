@@ -29,7 +29,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player[name=" + this.getName() + ", strategy=" + this.strategy.getStrategyName()+ "]";
+        return "Player[name=" + this.getName() + "]";
     }
 
     @Override

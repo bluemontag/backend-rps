@@ -27,11 +27,11 @@ public class BasicLogicTest {
     @Test
     public void rockBeatsScissorsTest() {
 
-        Player p1 = new Player("Juan");
-        Player p2 = new Player("Pedro");
+        Player p1 = new Player("Juan", () -> new Rock());
+        Player p2 = new Player("Pedro", () -> new Scissors());
         GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRoundWithElements(new Rock(), new Scissors());
+        RoundResult result = game.playRound();
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -45,11 +45,11 @@ public class BasicLogicTest {
     @Test
     public void scissorsIsBeatenByRockTest() {
 
-        Player p1 = new Player("Juan");
-        Player p2 = new Player("Pedro");
+        Player p1 = new Player("Juan", () -> new Scissors());
+        Player p2 = new Player("Pedro", () -> new Rock());
         GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRoundWithElements(new Scissors(), new Rock());
+        RoundResult result = game.playRound();
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -63,11 +63,11 @@ public class BasicLogicTest {
     @Test
     public void paperBeatsRockTest() {
 
-        Player p1 = new Player("Juan");
-        Player p2 = new Player("Pedro");
+        Player p1 = new Player("Juan", () -> new Paper());
+        Player p2 = new Player("Pedro", () -> new Rock());
         GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRoundWithElements(new Paper(), new Rock());
+        RoundResult result = game.playRound();
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
         
@@ -80,11 +80,11 @@ public class BasicLogicTest {
     @Test
     public void rockIsBeatenByPaperTest() {
 
-        Player p1 = new Player("Juan");
-        Player p2 = new Player("Pedro");
+        Player p1 = new Player("Juan", () -> new Rock());
+        Player p2 = new Player("Pedro", () -> new Paper());
         GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRoundWithElements(new Rock(), new Paper());
+        RoundResult result = game.playRound();
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -98,11 +98,11 @@ public class BasicLogicTest {
     @Test
     public void scissorsBeatsPaperTest() {
 
-        Player p1 = new Player("Juan");
-        Player p2 = new Player("Pedro");
+        Player p1 = new Player("Juan", () -> new Scissors());
+        Player p2 = new Player("Pedro", () -> new Paper());
         GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRoundWithElements(new Scissors(), new Paper());
+        RoundResult result = game.playRound();
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -116,11 +116,11 @@ public class BasicLogicTest {
     @Test
     public void paperIsBeatenByScissorsTest() {
 
-        Player p1 = new Player("Juan");
-        Player p2 = new Player("Pedro");
+        Player p1 = new Player("Juan", () -> new Paper());
+        Player p2 = new Player("Pedro", () -> new Scissors());
         GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRoundWithElements(new Paper(), new Scissors());
+        RoundResult result = game.playRound();
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -134,27 +134,28 @@ public class BasicLogicTest {
     @Test
     public void tieTest() {
 
-        Player p1 = new Player("Juan");
-        Player p2 = new Player("Pedro");
+        // create players with always scissors strategy:
+        Player p1 = new Player("Juan", () -> new Scissors());
+        Player p2 = new Player("Pedro", () -> new Scissors());
         GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
         
-        RoundResult result = game.playRoundWithElements(new Scissors(), new Scissors());
+        RoundResult result = game.playRound();
 
         // there must be a tie
         assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
-        p1 = new Player("Juan");
-        p2 = new Player("Pedro");
+        p1 = new Player("Juan", () -> new Paper());
+        p2 = new Player("Pedro", () -> new Paper());
 
-       result = game.playRoundWithElements(new Paper(), new Paper());
+       result = game.playRound();
 
         // there must be a tie
         assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
-        p1 = new Player("Juan");
-        p2 = new Player("Pedro");
+        p1 = new Player("Juan", () -> new Rock());
+        p2 = new Player("Pedro", () -> new Rock());
 
-       result = game.playRoundWithElements(new Rock(), new Rock());
+       result = game.playRound();
 
         // there must be a tie
         assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
