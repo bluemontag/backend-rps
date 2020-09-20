@@ -50,19 +50,19 @@ public class GameLogic {
             case 0:
                 // Tie        
                 logger.info("There is a tie");
-                result = new RoundResult(e1, e2, Optional.empty());
+                result = new RoundResult(e1, e2, Optional.empty(), GameStats.TIE_RESULT);
                 break;
 
             case -1:
                 // The first element wins
                 logger.info("{} beats {}", e1, e2);
-                result = new RoundResult(e1, e2, Optional.of(this.player1));
+                result = new RoundResult(e1, e2, Optional.of(this.player1), GameStats.PLAYER1_WON);
                 break;
 
             case 1:
                 // The second element wins
                 logger.info("{} beats {}", e2, e1);
-                result = new RoundResult(e1, e2, Optional.of(this.player2));
+                result = new RoundResult(e1, e2, Optional.of(this.player2), GameStats.PLAYER2_WON);
                 break;
 
             default:

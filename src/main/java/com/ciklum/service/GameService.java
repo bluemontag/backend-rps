@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ciklum.model.game.GameLogic;
 import com.ciklum.model.game.GameServer;
+import com.ciklum.model.game.GameStats;
 import com.ciklum.model.game.RoundResult;
 import com.ciklum.model.player.AlwaysRockStrategy;
 import com.ciklum.model.player.Player;
@@ -31,6 +32,10 @@ public class GameService {
     public List<RoundResult> getRoundsForUser(String userName) {
         
         return server.getRounds(userName);
+    }
+
+    public GameStats getGameStats() {
+        return server.getGameStats();
     }
 }
 

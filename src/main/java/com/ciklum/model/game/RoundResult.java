@@ -13,11 +13,13 @@ public class RoundResult {
     private final Element e1;
     private final Element e2;
     private final Optional<Player> winner;
-    
-    public RoundResult(Element e1, Element e2, Optional<Player> winner) {
+    private final String statsText;
+
+    public RoundResult(Element e1, Element e2, Optional<Player> winner, String statsText) {
         this.e1 = e1;
         this.e2 = e2;
         this.winner = winner;
+        this.statsText = statsText;
     }
 
     /**
@@ -39,5 +41,12 @@ public class RoundResult {
         return new RoundResultVO(e1.getElementName(),
                                  e2.getElementName(),
                                  winnerString);
+    }
+
+    /**
+     * @return the statsText
+     */
+    public String getStatsText() {
+        return statsText;
     }
 }

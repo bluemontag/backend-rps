@@ -3,6 +3,7 @@ package com.ciklum.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ciklum.model.game.GameStats;
 import com.ciklum.model.game.RoundResult;
 import com.ciklum.model.vo.RoundResultVO;
 import com.ciklum.service.GameService;
@@ -46,4 +47,13 @@ public class GameController {
 
         return results.stream().map( RoundResult::getVO ).collect(Collectors.toList());
     }
+
+    @RequestMapping(value = "/getGameStats", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)//NOSONAR
+    public GameStats getGameStats() {
+        
+        logger.info("GET /getGameStats");
+
+        return this.gameService.getGameStats();
+    }
+
 }
