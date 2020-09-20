@@ -13,6 +13,8 @@ import com.ciklum.model.player.Player;
  */
 public class Game {
     
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Game.class);
+
     private GameServer server;
     private String userName;
     private Player player1;
@@ -42,7 +44,7 @@ public class Game {
      */
     public RoundResult playRound() {
 
-        System.out.println(this.player1.getName() + " is playing with " + this.player2.getName());
+        logger.info("{} is playing with {}", this.player1.getName(), this.player2.getName());
 
         int outcome = this.player1.getCurrentElement().compareTo(this.player2.getCurrentElement());
         RoundResult result = null;
@@ -50,19 +52,19 @@ public class Game {
         switch (outcome) {
             case 0:
                 // Tie        
-                System.out.println("There is a tie");
+                logger.info("There is a tie");
                 result = new RoundResult(this.player1, this.player2, Optional.empty());
                 break;
 
             case -1:
                 // The first element wins
-                System.out.println(this.player1.getCurrentElement() + " beats " + this.player2.getCurrentElement());
+                logger.info("{} beats {}", this.player1.getCurrentElement(), this.player2.getCurrentElement());
                 result = new RoundResult(this.player1, this.player2, Optional.of(this.player1));
                 break;
 
             case 1:
                 // The second element wins
-                System.out.println(this.player2.getCurrentElement() + " beats " + this.player1.getCurrentElement());
+                logger.info("{} beats {}", this.player2.getCurrentElement(), this.player1.getCurrentElement());
                 result = new RoundResult(this.player1, this.player2, Optional.of(this.player2));
                 break;
 

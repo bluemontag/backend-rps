@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 public class GameLogicTest {
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(GameLogicTest.class);
+
     @Test
     public void gameCreationTest() {
 
@@ -42,7 +44,7 @@ public class GameLogicTest {
         // the first user results are not changed:
         assertEquals(2, server.getRoundsPlayed("Ignacio"), "The number of rounds played should be 2");
 
-        System.out.println("The test finished ok.");
+        logger.info("The test finished ok.");
     }
 
 }

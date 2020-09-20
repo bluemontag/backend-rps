@@ -39,6 +39,7 @@ public class GameController {
 
     @RequestMapping(value = "/getRoundsForUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)//NOSONAR
     public List<RoundResultVO> getRoundsForUser(String userName) {
+        
         logger.info("GET /getRoundsForUser userName={}", userName);
 
         List<RoundResult> results = this.gameService.getRoundsForUser(userName);

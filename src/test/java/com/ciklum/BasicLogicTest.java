@@ -12,14 +12,16 @@ import org.junit.jupiter.api.Test;
 
 public class BasicLogicTest {
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BasicLogicTest.class);
+
     @BeforeEach
     public void beginTest() {
-        System.out.println("================================================================================");
+        logger.info("================================================================================");
     }
 
     @AfterEach
     public void endTest() {
-        System.out.println("================================================================================");
+        logger.info("================================================================================");
     }
 
     @Test
@@ -37,7 +39,7 @@ public class BasicLogicTest {
         // and must be p1
         assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
 
-        System.out.println("The test rockBeatsScissorsTest finished ok.");
+        logger.info("The test rockBeatsScissorsTest finished ok.");
     }
 
     @Test
@@ -55,7 +57,7 @@ public class BasicLogicTest {
         // and must be p1
         assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
 
-        System.out.println("The test scissorsIsBeatenByRockTest finished ok.");
+        logger.info("The test scissorsIsBeatenByRockTest finished ok.");
     }
 
     @Test
@@ -72,7 +74,7 @@ public class BasicLogicTest {
         // and must be p1
         assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
 
-        System.out.println("The test paperBeatsRockTest finished ok.");
+        logger.info("The test paperBeatsRockTest finished ok.");
     }
 
     @Test
@@ -90,7 +92,7 @@ public class BasicLogicTest {
         // and must be p1
         assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
 
-        System.out.println("The test rockIsBeatenByPaperTest finished ok.");
+        logger.info("The test rockIsBeatenByPaperTest finished ok.");
     }
 
     @Test
@@ -108,7 +110,7 @@ public class BasicLogicTest {
         // and must be p1
         assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
 
-        System.out.println("The test scissorsBeatsPaperTest finished ok.");
+        logger.info("The test scissorsBeatsPaperTest finished ok.");
     }
 
     @Test
@@ -126,7 +128,7 @@ public class BasicLogicTest {
         // and must be p1
         assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
 
-        System.out.println("The test paperIsBeatenByScissorsTest finished ok.");
+        logger.info("The test paperIsBeatenByScissorsTest finished ok.");
     }
 
     @Test
@@ -157,7 +159,7 @@ public class BasicLogicTest {
         // there must be a tie
         assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
-        System.out.println("The test tieTest finished ok.");
+        logger.info("The test tieTest finished ok.");
     }
 
 }
