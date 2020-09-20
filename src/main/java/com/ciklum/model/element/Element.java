@@ -16,7 +16,7 @@ public abstract class Element implements Comparable<Element> {
         return (this.hashCode() == element.hashCode());
     }
 
-    public String getCurrentElementAsString() {
+    public String getElementName() {
         return this.toString();
     }
 }

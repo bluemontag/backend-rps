@@ -17,7 +17,7 @@ public class AlwaysRockStrategy implements PlayerStrategy {
     }
 
     @Override
-    public String getStrategy() {
+    public String getStrategyName() {
         return "Always Rock Strategy";
     }
 }
