@@ -32,7 +32,7 @@ public class GameService {
         return game.playRound();
     }
 
-    public List<RoundResult> getRounds(String userName) {
+    public List<RoundResult> getRoundsForUser(String userName) {
         
         return server.getRounds(userName);
     }
