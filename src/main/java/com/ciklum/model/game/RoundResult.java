@@ -1,6 +1,8 @@
 package com.ciklum.model.game;
 
 import java.util.Optional;
+
+import com.ciklum.model.element.Element;
 import com.ciklum.model.player.Player;
 import com.ciklum.model.vo.RoundResultVO;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -8,28 +10,14 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RoundResult {
     
-    private final Player player1;
-    private final Player player2;
+    private final Element e1;
+    private final Element e2;
     private final Optional<Player> winner;
     
-    public RoundResult(Player player1, Player player2, Optional<Player> winner) {
-        this.player1 = player1;
-        this.player2 = player2;
+    public RoundResult(Element e1, Element e2, Optional<Player> winner) {
+        this.e1 = e1;
+        this.e2 = e2;
         this.winner = winner;
-    }
-
-    /**
-     * @return the player1
-     */
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    /**
-     * @return the player2
-     */
-    public Player getPlayer2() {
-        return player2;
     }
 
     /**
@@ -48,8 +36,8 @@ public class RoundResult {
         if (optWinner.isPresent()) {
             winnerString = optWinner.get().getName();
         }
-        return new RoundResultVO(this.getPlayer1().getCurrentElement().getElementName(),
-                                 this.getPlayer2().getCurrentElement().getElementName(),
+        return new RoundResultVO(e1.getElementName(),
+                                 e2.getElementName(),
                                  winnerString);
     }
 }

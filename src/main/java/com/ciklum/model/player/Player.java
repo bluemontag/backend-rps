@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Player {
 
-    private String name;
-    private Element currentElement;
-    private PlayerStrategy strategy;
+    // immutable properties
+    private final String name;
+    private final PlayerStrategy strategy;
 
     /**
      * A Player must always have selected an element and a name.
@@ -17,21 +17,19 @@ public class Player {
      * @param name
      * @param element
      */
-    public Player(String name, Element element) {
+    public Player(String name) {
         this.name = name;
-        this.currentElement = element;
         this.strategy = new RandomStrategy();
     }
 
-    public Player(String name, PlayerStrategy strategy, Element element) {
+    public Player(String name, PlayerStrategy strategy) {
         this.name = name;
-        this.currentElement = element;
         this.strategy = strategy;
     }
 
     @Override
     public String toString() {
-        return "Player[name=" + this.getName() + ", element=" + this.getCurrentElement() + "]";
+        return "Player[name=" + this.getName() + ", strategy=" + this.strategy.getStrategyName()+ "]";
     }
 
     @Override
@@ -52,27 +50,8 @@ public class Player {
         return this.name;
     }
 
-    public Element getCurrentElement() {
-        return this.currentElement;
-    }
-
-    public void chooseNewElement() {
-        Element e = this.strategy.chooseNewElement();
-        this.currentElement = e;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @param currentElement the currentElement to set
-     */
-    public void setCurrentElement(Element currentElement) {
-        this.currentElement = currentElement;
+    public Element chooseNewElement() {
+        return this.strategy.chooseNewElement();
     }
 
     /**
@@ -82,10 +61,4 @@ public class Player {
         return strategy;
     }
 
-    /**
-     * @param strategy the strategy to set
-     */
-    public void setStrategy(PlayerStrategy strategy) {
-        this.strategy = strategy;
-    }
 }

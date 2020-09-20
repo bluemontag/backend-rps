@@ -27,11 +27,11 @@ public class BasicLogicTest {
     @Test
     public void rockBeatsScissorsTest() {
 
-        Player p1 = new Player("Juan", new Rock());
-        Player p2 = new Player("Pedro", new Scissors());
-        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        Player p1 = new Player("Juan");
+        Player p2 = new Player("Pedro");
+        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRound();
+        RoundResult result = game.playRoundWithElements(new Rock(), new Scissors());
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -45,11 +45,11 @@ public class BasicLogicTest {
     @Test
     public void scissorsIsBeatenByRockTest() {
 
-        Player p1 = new Player("Juan", new Scissors());
-        Player p2 = new Player("Pedro", new Rock());
-        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        Player p1 = new Player("Juan");
+        Player p2 = new Player("Pedro");
+        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRound();
+        RoundResult result = game.playRoundWithElements(new Scissors(), new Rock());
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -63,11 +63,11 @@ public class BasicLogicTest {
     @Test
     public void paperBeatsRockTest() {
 
-        Player p1 = new Player("Juan", new Paper());
-        Player p2 = new Player("Pedro", new Rock());
-        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        Player p1 = new Player("Juan");
+        Player p2 = new Player("Pedro");
+        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRound();
+        RoundResult result = game.playRoundWithElements(new Paper(), new Rock());
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
         
@@ -80,11 +80,11 @@ public class BasicLogicTest {
     @Test
     public void rockIsBeatenByPaperTest() {
 
-        Player p1 = new Player("Juan", new Rock());
-        Player p2 = new Player("Pedro", new Paper());
-        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        Player p1 = new Player("Juan");
+        Player p2 = new Player("Pedro");
+        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRound();
+        RoundResult result = game.playRoundWithElements(new Rock(), new Paper());
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -98,11 +98,11 @@ public class BasicLogicTest {
     @Test
     public void scissorsBeatsPaperTest() {
 
-        Player p1 = new Player("Juan", new Scissors());
-        Player p2 = new Player("Pedro", new Paper());
-        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        Player p1 = new Player("Juan");
+        Player p2 = new Player("Pedro");
+        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRound();
+        RoundResult result = game.playRoundWithElements(new Scissors(), new Paper());
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -116,11 +116,11 @@ public class BasicLogicTest {
     @Test
     public void paperIsBeatenByScissorsTest() {
 
-        Player p1 = new Player("Juan", new Paper());
-        Player p2 = new Player("Pedro", new Scissors());
-        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        Player p1 = new Player("Juan");
+        Player p2 = new Player("Pedro");
+        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
 
-        RoundResult result = game.playRound();
+        RoundResult result = game.playRoundWithElements(new Paper(), new Scissors());
 
         // there must be a winner
         assertTrue(result.getWinner().isPresent(), "There is not a winner");
@@ -134,27 +134,27 @@ public class BasicLogicTest {
     @Test
     public void tieTest() {
 
-        Player p1 = new Player("Juan", new Scissors());
-        Player p2 = new Player("Pedro", new Scissors());
-        Game game = new Game(new GameServer(), "Mathiew", p1, p2);
+        Player p1 = new Player("Juan");
+        Player p2 = new Player("Pedro");
+        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
         
-        RoundResult result = game.playRound();
+        RoundResult result = game.playRoundWithElements(new Scissors(), new Scissors());
 
         // there must be a tie
         assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
-        p1 = new Player("Juan", new Paper());
-        p2 = new Player("Pedro", new Paper());
+        p1 = new Player("Juan");
+        p2 = new Player("Pedro");
 
-       result = game.playRound();
+       result = game.playRoundWithElements(new Paper(), new Paper());
 
         // there must be a tie
         assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
 
-        p1 = new Player("Juan", new Rock());
-        p2 = new Player("Pedro", new Rock());
+        p1 = new Player("Juan");
+        p2 = new Player("Pedro");
 
-       result = game.playRound();
+       result = game.playRoundWithElements(new Rock(), new Rock());
 
         // there must be a tie
         assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
