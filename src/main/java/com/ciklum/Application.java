@@ -1,5 +1,6 @@
 package com.ciklum;
 
+import com.ciklum.model.game.ServerMemory;
 import com.ciklum.service.GameService;
 
 import org.springframework.boot.SpringApplication;
@@ -19,6 +20,11 @@ public class Application {
     @Bean
     public GameService getGameService() {
         return new GameService();
+    }
+
+    @Bean
+    public ServerMemory getServerMemory() {
+        return new ServerMemory();
     }
 
     @Bean

@@ -6,26 +6,21 @@ import com.ciklum.model.element.Element;
 import com.ciklum.model.player.Player;
 
 /**
- * GameLogic is an instance of a RPS Game in a GameServer,
- *  between the same pair of players, and for a given userName.
+ * Game is an instance of a RPS Game
  * 
  * It contains the logic for playing one round of the game.
  * 
  */
-public class GameLogic {
+public class Game {
     
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(GameLogic.class);
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Game.class);
 
     // immutable fields
-    private final GameServer server;
-    private final String userName;
     private final Player player1;
     private final Player player2;
 
 
-    public GameLogic(GameServer server, String userName, Player player1, Player player2) {
-        this.server = server;
-        this.userName = userName;
+    public Game(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
     }
@@ -47,19 +42,19 @@ public class GameLogic {
             case 0:
                 // Tie        
                 logger.info("There is a tie");
-                result = new RoundResult(e1, e2, Optional.empty(), GameStats.TIE_RESULT);
+                result = new RoundResult(e1, e2, Optional.empty(), false, false);
                 break;
 
             case -1:
                 // The first element wins
                 logger.info("{} beats {}", e1, e2);
-                result = new RoundResult(e1, e2, Optional.of(this.player1), GameStats.PLAYER1_WON);
+                result = new RoundResult(e1, e2, Optional.of(this.player1), true, false);
                 break;
 
             case 1:
                 // The second element wins
                 logger.info("{} beats {}", e2, e1);
-                result = new RoundResult(e1, e2, Optional.of(this.player2), GameStats.PLAYER2_WON);
+                result = new RoundResult(e1, e2, Optional.of(this.player2), false, true);
                 break;
 
             default:
@@ -67,9 +62,6 @@ public class GameLogic {
                 return null;
         }
 
-        // add to the server
-        server.addNewResult(this.userName, result);
-        
         return result;
     }
 
@@ -85,5 +77,19 @@ public class GameLogic {
         Element e2 = this.player2.chooseNewElement();
 
         return this.playRoundWithElements(e1, e2);
+    }
+
+    /**
+     * @return the player1
+     */
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    /**
+     * @return the player2
+     */
+    public Player getPlayer2() {
+        return player2;
     }
 }

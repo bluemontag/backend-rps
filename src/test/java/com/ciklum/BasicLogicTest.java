@@ -1,6 +1,7 @@
 package com.ciklum;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.ciklum.model.player.*;
 import com.ciklum.model.game.*;
@@ -27,52 +28,57 @@ public class BasicLogicTest {
     @Test
     public void rockBeatsScissorsTest() {
 
-        Player p1 = new Player("Juan", () -> new Rock());
-        Player p2 = new Player("Pedro", () -> new Scissors());
-        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
+        Game game = givenAGameOfPlayers(new Rock(), new Scissors());
 
         RoundResult result = game.playRound();
 
-        // there must be a winner
-        assertTrue(result.getWinner().isPresent(), "There is not a winner");
-        
-        // and must be p1
-        assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
+        assertWinnerPlayer1(result, game);
 
         logger.info("The test rockBeatsScissorsTest finished ok.");
+    }
+
+    // create test data to operate on
+    private Game givenAGameOfPlayers(Element e1, Element e2) {
+        // create 2 players with strategies "always e1 and always e2"
+        Player p1 = new Player("Juan", () -> e1);
+        Player p2 = new Player("Pedro", () -> e2);
+        return new Game(p1, p2);
+    }
+
+    private void assertWinnerPlayer1(RoundResult result, Game game) {
+        // there must be a winner
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
+        // and must be p1
+        assertEquals(result.getWinner().get(), game.getPlayer1(), "There is a problem with the outcome");
     }
 
     @Test
     public void scissorsIsBeatenByRockTest() {
 
-        Player p1 = new Player("Juan", () -> new Scissors());
-        Player p2 = new Player("Pedro", () -> new Rock());
-        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
+        Game game = givenAGameOfPlayers(new Scissors(), new Rock());
 
         RoundResult result = game.playRound();
 
-        // there must be a winner
-        assertTrue(result.getWinner().isPresent(), "There is not a winner");
-        
-        // and must be p1
-        assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
+        assertWinnerPlayer2(result, game);
 
         logger.info("The test scissorsIsBeatenByRockTest finished ok.");
+    }
+
+    private void assertWinnerPlayer2(RoundResult result, Game game) {
+        // there must be a winner
+        assertTrue(result.getWinner().isPresent(), "There is not a winner");
+        // and must be p1
+        assertEquals(result.getWinner().get(), game.getPlayer2(), "There is a problem with the outcome");
     }
 
     @Test
     public void paperBeatsRockTest() {
 
-        Player p1 = new Player("Juan", () -> new Paper());
-        Player p2 = new Player("Pedro", () -> new Rock());
-        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
+        Game game = givenAGameOfPlayers(new Paper(), new Rock());
 
         RoundResult result = game.playRound();
-        // there must be a winner
-        assertTrue(result.getWinner().isPresent(), "There is not a winner");
-        
-        // and must be p1
-        assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
+
+        assertWinnerPlayer1(result, game);
 
         logger.info("The test paperBeatsRockTest finished ok.");
     }
@@ -80,17 +86,11 @@ public class BasicLogicTest {
     @Test
     public void rockIsBeatenByPaperTest() {
 
-        Player p1 = new Player("Juan", () -> new Rock());
-        Player p2 = new Player("Pedro", () -> new Paper());
-        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
+        Game game = givenAGameOfPlayers(new Rock(), new Paper());
 
         RoundResult result = game.playRound();
 
-        // there must be a winner
-        assertTrue(result.getWinner().isPresent(), "There is not a winner");
-        
-        // and must be p1
-        assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
+        assertWinnerPlayer2(result, game);
 
         logger.info("The test rockIsBeatenByPaperTest finished ok.");
     }
@@ -98,17 +98,11 @@ public class BasicLogicTest {
     @Test
     public void scissorsBeatsPaperTest() {
 
-        Player p1 = new Player("Juan", () -> new Scissors());
-        Player p2 = new Player("Pedro", () -> new Paper());
-        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
+        Game game = givenAGameOfPlayers(new Scissors(), new Paper());
 
         RoundResult result = game.playRound();
 
-        // there must be a winner
-        assertTrue(result.getWinner().isPresent(), "There is not a winner");
-
-        // and must be p1
-        assertEquals(result.getWinner().get(), p1, "There is a problem with the outcome");
+        assertWinnerPlayer1(result, game);
 
         logger.info("The test scissorsBeatsPaperTest finished ok.");
     }
@@ -116,51 +110,50 @@ public class BasicLogicTest {
     @Test
     public void paperIsBeatenByScissorsTest() {
 
-        Player p1 = new Player("Juan", () -> new Paper());
-        Player p2 = new Player("Pedro", () -> new Scissors());
-        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
+        Game game = givenAGameOfPlayers(new Paper(), new Scissors());
 
         RoundResult result = game.playRound();
 
-        // there must be a winner
-        assertTrue(result.getWinner().isPresent(), "There is not a winner");
-        
-        // and must be p1
-        assertEquals(result.getWinner().get(), p2, "There is a problem with the outcome");
+        assertWinnerPlayer2(result, game);
 
         logger.info("The test paperIsBeatenByScissorsTest finished ok.");
     }
 
     @Test
-    public void tieTest() {
+    public void scissorsDrawTest() {
 
-        // create players with always scissors strategy:
-        Player p1 = new Player("Juan", () -> new Scissors());
-        Player p2 = new Player("Pedro", () -> new Scissors());
-        GameLogic game = new GameLogic(new GameServer(), "Mathiew", p1, p2);
-        
+        Game game = givenAGameOfPlayers(new Scissors(), new Scissors());
+
         RoundResult result = game.playRound();
 
-        // there must be a tie
-        assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
+        assertDrawResult(result);
 
-        p1 = new Player("Juan", () -> new Paper());
-        p2 = new Player("Pedro", () -> new Paper());
-
-       result = game.playRound();
-
-        // there must be a tie
-        assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
-
-        p1 = new Player("Juan", () -> new Rock());
-        p2 = new Player("Pedro", () -> new Rock());
-
-       result = game.playRound();
-
-        // there must be a tie
-        assertTrue(!result.getWinner().isPresent(), "There should not be a winner (its a tie)");
-
-        logger.info("The test tieTest finished ok.");
+        logger.info("The test scissorsDrawTest finished ok.");
     }
 
+    public void papersDrawTest() {
+
+        Game game = givenAGameOfPlayers(new Paper(), new Paper());
+
+        RoundResult result = game.playRound();
+
+        assertDrawResult(result);
+
+        logger.info("The test paperDrawTest finished ok.");
+    }
+
+    public void rocksDrawTest() {
+
+        Game game = givenAGameOfPlayers(new Rock(), new Rock());
+
+        RoundResult result = game.playRound();
+
+        assertDrawResult(result);
+
+        logger.info("The rocksDrawTest tieTest finished ok.");
+    }
+
+    private void assertDrawResult(RoundResult result) {
+        assertFalse(result.getWinner().isPresent(), "There should not be a winner (its a tie)");
+    }
 }

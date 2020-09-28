@@ -1,23 +1,26 @@
 package com.ciklum;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+
 import com.ciklum.model.game.GameStats;
 import com.ciklum.model.game.RoundResult;
 import com.ciklum.service.GameService;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = com.ciklum.config.TestConfig.class)
@@ -29,66 +32,117 @@ public class GameServiceTest {
     @Autowired
     private GameService gameService;
 
-    @BeforeAll
-    private void beforeAllTests() {
-        
-    }
+    private String userName = "Javier";
 
-    @BeforeEach
+    @Before
     public void beforeEach() {
         logger.info("==================================================================");
+        this.gameService.clearServerMemory();
     }
     
-    @AfterEach
+    @After
     public void afterEach() {
         logger.info("==================================================================");
     }
 
-    @AfterAll
-    private void afterAllTests() {
+    @Test
+    public void testWhenPlayRoundThenStatsAreIncremented() {
+        // given an empty game Service
+        
+        // play one round
+        RoundResult result = gameService.playRound(userName, "Player 1", "Player 2");
+        
+        assertStatsIncrementAccordingToResult(result);
 
+        logger.info("The test testWhenPlayRoundThenStatsAreIncremented finished ok.");
+    }
+
+    private void assertStatsIncrementAccordingToResult(RoundResult result) {
+        GameStats stats = gameService.getGameStats();
+
+        // check the total stats
+        assertEquals(1, stats.getTotalRounds());
+        
+        if (result.isDraw()) {
+            assertEquals(1, stats.getTotalDraws());
+            assertEquals(0, stats.getTotalWinsP1());
+            assertEquals(0, stats.getTotalWinsP2());
+        } else if (result.isPlayer1Winner()) {
+            assertEquals(0, stats.getTotalDraws());
+            assertEquals(1, stats.getTotalWinsP1());
+            assertEquals(0, stats.getTotalWinsP2());
+        } else {
+            assertEquals(0, stats.getTotalDraws());
+            assertEquals(0, stats.getTotalWinsP1());
+            assertEquals(1, stats.getTotalWinsP2());
+        }
     }
 
     @Test
-    public void getStatsTest() {
-        logger.info("================================================================================");
+    public void testWhenPlayRoundThenResultIsStored() {
+        // given an empty game Service
+
+        // play one round
+        RoundResult result = gameService.playRound(userName, "Player 1", "Player 2");
+        
+        assertRoundsForUserContainsResult(result, userName);
+
+        logger.info("The test testWhenPlayRoundThenResultIsStored finished ok.");
+    }
+
+    private void assertRoundsForUserContainsResult(RoundResult result, String userName) {
+        
+        List<RoundResult> results = gameService.getRoundsForUser(userName);
+        
+        assertNotEquals(null, results);
+        assertFalse(results.isEmpty());
+        assertEquals(1, results.size());
+        assertEquals(result, results.get(0));
+    }
+
+    @Test
+    public void testWhenGettingStatsThenEmptyStatsIsReturned() {
+        // given an empty game service
+
+        // When getting game stats
         GameStats stats = gameService.getGameStats();
-        
-        // must be empty
+
+        // then
+        assertNonEmptyStatsWithZeroValues(stats);
+
+        logger.info("The test testWhenGettingStatsThenEmptyStatsIsReturned finished ok.");
+    }
+
+    private void assertNonEmptyStatsWithZeroValues(GameStats stats) {
+        assertNotNull(stats);
         assertEquals(0, stats.getTotalRounds());
+        assertEquals(0, stats.getTotalDraws());
+        assertEquals(0, stats.getTotalWinsP1());
+        assertEquals(0, stats.getTotalWinsP2());
+    }
 
-        // add one game and check stats
-        gameService.playRound("Ignacio", "Player 1", "Player 2");
-        
-        List<RoundResult> ignacioRounds = gameService.getRoundsForUser("Ignacio");
-        assertTrue(!ignacioRounds.isEmpty());
-        assertEquals(1, ignacioRounds.size());
-        // check the total stats
-        stats = gameService.getGameStats();
-        assertEquals(1, stats.getTotalRounds());
+    @Test
+    public void testWhenPlayARoundAndClearMemoryThenEmptyStatsIsReturned() {
+        // given an empty game Service
 
-        gameService.playRound("Ramiro", "Player 1", "Player 2");
-        List<RoundResult> ramiroRounds = gameService.getRoundsForUser("Ramiro");
-        assertTrue(!ramiroRounds.isEmpty());
-        assertEquals(1, ramiroRounds.size());
-        // stats for 1st user are the same
-        assertTrue(!ignacioRounds.isEmpty());
-        assertEquals(1, ignacioRounds.size());
+        // When play one round
+        gameService.playRound(userName, "Player 1", "Player 2");
 
-        // now the total stats are 2
-        stats = gameService.getGameStats();
-        assertEquals(2, stats.getTotalRounds());
+        // and clear the memory:
+        gameService.clearServerMemory();
 
-        // the final game
-        gameService.playRound("Ramiro", "Player 1", "Player 2");
-        ramiroRounds = gameService.getRoundsForUser("Ramiro");
-        assertTrue(!ramiroRounds.isEmpty());
-        assertEquals(2, ramiroRounds.size());
-        stats = gameService.getGameStats();
-        assertEquals(3, stats.getTotalRounds());
+        // Then
+        assertNonEmptyStatsWithZeroValues(gameService.getGameStats());
+        assertMemoryEmpty();
 
-        logger.info("The test finished ok.");
-        logger.info("================================================================================");
+        logger.info("The test testWhenPlayARoundAndClearMemoryThenEmptyStatsIsReturned finished ok.");
+    }
+
+    private void assertMemoryEmpty() {
+        List<RoundResult> results = gameService.getRoundsForUser(userName);
+
+        assertNotNull(results);
+        assertTrue(results.isEmpty());
     }
 }
 
