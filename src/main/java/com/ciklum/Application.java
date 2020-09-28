@@ -23,7 +23,7 @@ public class Application {
     }
 
     @Bean
-    public ServerMemory getGameServer() {
+    public ServerMemory getServerMemory() {
         return new ServerMemory();
     }
 

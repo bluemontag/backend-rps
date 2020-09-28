@@ -15,7 +15,7 @@ public class TestConfig {
     }
 
     @Bean
-    public ServerMemory getGameServer() {
+    public ServerMemory getServerMemory() {
         return new ServerMemory();
     }
 }
