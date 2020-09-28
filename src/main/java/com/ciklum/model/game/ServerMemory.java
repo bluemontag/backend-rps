@@ -77,5 +77,9 @@ public class ServerMemory {
 
     public void clear() {
         this.games.clear();
+        this.totalDraws = 0;
+        this.totalRoundsPlayed = 0;
+        this.totalWinsP1 = 0;
+        this.totalWinsP2 = 0;
     }
 }
