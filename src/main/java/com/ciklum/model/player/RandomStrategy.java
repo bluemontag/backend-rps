@@ -35,8 +35,4 @@ public class RandomStrategy implements PlayerStrategy {
         }
     }
 
-    // @Override
-    // public String getStrategyName() {
-    //     return "Random Strategy";
-    // }
 }

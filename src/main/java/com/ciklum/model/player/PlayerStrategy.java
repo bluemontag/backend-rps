@@ -6,5 +6,4 @@ public interface PlayerStrategy {
 
     public Element chooseNewElement();
     
-    // public String getStrategyName();
 }
