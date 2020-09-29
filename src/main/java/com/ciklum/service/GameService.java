@@ -6,10 +6,6 @@ import com.ciklum.model.game.Game;
 import com.ciklum.model.game.ServerMemory;
 import com.ciklum.model.game.GameStats;
 import com.ciklum.model.game.RoundResult;
-import com.ciklum.model.player.AlwaysRockStrategy;
-import com.ciklum.model.player.Player;
-import com.ciklum.model.player.RandomStrategy;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

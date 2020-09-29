@@ -15,7 +15,7 @@ public class RandomStrategy implements PlayerStrategy {
     }
 
     @Override
-    public Shape chooseNewElement() {
+    public Shape chooseNewShape() {
         int elem = this.rand.nextInt(3);
 
         switch (elem) {

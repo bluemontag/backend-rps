@@ -12,6 +12,7 @@ import com.ciklum.model.game.Game;
 import com.ciklum.model.game.GameStats;
 import com.ciklum.model.game.RoundResult;
 import com.ciklum.model.player.Player;
+import com.ciklum.model.player.RandomStrategy;
 import com.ciklum.service.GameService;
 
 import org.junit.After;
@@ -95,8 +96,8 @@ public class GameServiceTest {
     }
 
     private Game givenAGameBetweenPlayer1AndPlayer2() {
-        Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
+        Player player1 = new Player("Player 1", new RandomStrategy());
+        Player player2 = new Player("Player 2", new RandomStrategy());
         return new Game(player1, player2);
     }
 

@@ -7,20 +7,23 @@ import com.ciklum.model.player.*;
 import com.ciklum.model.game.*;
 import com.ciklum.model.shapes.Shape;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 public class BasicLogicTest {
 
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BasicLogicTest.class);
 
-    @BeforeEach
+    @Before
     public void beginTest() {
         logger.info("================================================================================");
     }
 
-    @AfterEach
+    @After
     public void endTest() {
         logger.info("================================================================================");
     }
@@ -131,6 +134,7 @@ public class BasicLogicTest {
         logger.info("The test scissorsDrawTest finished ok.");
     }
 
+    @Test
     public void papersDrawTest() {
 
         Game game = givenAGameOfPlayers(Shape.PAPER, Shape.PAPER);
@@ -142,6 +146,7 @@ public class BasicLogicTest {
         logger.info("The test paperDrawTest finished ok.");
     }
 
+    @Test
     public void rocksDrawTest() {
 
         Game game = givenAGameOfPlayers(Shape.ROCK, Shape.ROCK);

@@ -65,8 +65,8 @@ public class Game {
      * @return the {@link RoundResult} that corresponds with the result of the round (winner or a tie)
      */
     public RoundResult playRound() {
-        Shape s1 = this.player1.chooseNewElement();
-        Shape s2 = this.player2.chooseNewElement();
+        Shape s1 = this.getPlayer1().chooseNewShape();
+        Shape s2 = this.getPlayer2().chooseNewShape();
 
         return this.playRoundWithElements(s1, s2);
     }

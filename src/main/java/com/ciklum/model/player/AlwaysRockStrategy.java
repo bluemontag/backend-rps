@@ -11,7 +11,7 @@ public class AlwaysRockStrategy implements PlayerStrategy {
     }
 
     @Override
-    public Shape chooseNewElement() {
+    public Shape chooseNewShape() {
         return Shape.ROCK;
     }
 

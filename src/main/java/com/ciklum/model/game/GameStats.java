@@ -52,5 +52,36 @@ public class GameStats {
         return totalDraws;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (totalDraws ^ (totalDraws >>> 32));
+        result = prime * result + (int) (totalRounds ^ (totalRounds >>> 32));
+        result = prime * result + (int) (totalWinsP1 ^ (totalWinsP1 >>> 32));
+        result = prime * result + (int) (totalWinsP2 ^ (totalWinsP2 >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GameStats other = (GameStats) obj;
+        if (totalDraws != other.totalDraws)
+            return false;
+        if (totalRounds != other.totalRounds)
+            return false;
+        if (totalWinsP1 != other.totalWinsP1)
+            return false;
+        if (totalWinsP2 != other.totalWinsP2)
+            return false;
+        return true;
+    }
+
     
 }
