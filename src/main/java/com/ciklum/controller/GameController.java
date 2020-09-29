@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,16 +41,16 @@ public class GameController {
 	private GameService gameService;
 	
     @PostMapping(value = "/playRound", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RoundResultVO playRound(@RequestParam @NotBlank @Size(max = USERNAME_MAX_LEN) String userName,
-                                   @RequestParam @NotBlank @Size(max = PLAYER_NAME_MAX_LEN) String player1Name,
-                                   @RequestParam @NotBlank @Size(max = PLAYER_NAME_MAX_LEN) String player2Name) {
+    public RoundResultVO playRound(@RequestParam(required = true) @NotBlank @Size(max = USERNAME_MAX_LEN) String userName,
+                                   @RequestParam(required = true) @NotBlank @Size(max = PLAYER_NAME_MAX_LEN) String player1Name,
+                                   @RequestParam(required = true) @NotBlank @Size(max = PLAYER_NAME_MAX_LEN) String player2Name) {
 
         logger.info("POST /playRound userName={}, player1Name={}, player2Name={}", userName, player1Name, player2Name);
         
         // Recomended by the book "Clean Code"
-        assert(userName != null && !userName.isEmpty() && userName.length() <= USERNAME_MAX_LEN); // NOSONAR
-        assert(player1Name != null && !player1Name.isEmpty() && player1Name.length() <= PLAYER_NAME_MAX_LEN); // NOSONAR
-        assert(player2Name != null && !player2Name.isEmpty() && player2Name.length() <= PLAYER_NAME_MAX_LEN); // NOSONAR
+        validateRequiredStringParameter(userName, "userName", USERNAME_MAX_LEN);
+        validateRequiredStringParameter(player1Name, "player1Name", PLAYER_NAME_MAX_LEN);
+        validateRequiredStringParameter(player2Name, "player2Name", PLAYER_NAME_MAX_LEN);
 
         Player player1 = new Player(player1Name, new AlwaysRockStrategy());
         Player player2 = new Player(player2Name, new RandomStrategy());
@@ -63,13 +62,19 @@ public class GameController {
         return result.getVO();
     }
 
+    private void validateRequiredStringParameter(String value, String name, int maxLength) {
+        if (value != null && !value.isEmpty() && value.length() <= maxLength) {
+            throw new IllegalArgumentException("Parameter " + name + " is invalid");
+        }
+    }
+
     @GetMapping(value = "/getRoundsForUser", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RoundResultVO> getRoundsForUser(@PathVariable @NotBlank @Size(max = USERNAME_MAX_LEN) String userName) {
+    public List<RoundResultVO> getRoundsForUser(@RequestParam(required = true) @NotBlank @Size(max = USERNAME_MAX_LEN) String userName) {
         
         logger.info("GET /getRoundsForUser userName={}", userName);
 
         // Recomended by the book "Clean Code"
-        assert(userName != null && !userName.isEmpty() && userName.length() <= USERNAME_MAX_LEN); // NOSONAR
+        validateRequiredStringParameter(userName, "userName", USERNAME_MAX_LEN);
 
         List<RoundResult> results = this.gameService.getRoundsForUser(userName);
 
