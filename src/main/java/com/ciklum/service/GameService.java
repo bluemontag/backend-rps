@@ -29,14 +29,9 @@ public class GameService {
      * @param player2Name
      * @return
      */
-    public RoundResult playRound(String userName, String player1Name, String player2Name) {
+    public RoundResult playRound(String userName, Game game) {
 
         logger.info("GameService.playRound() called.");
-
-        Player player1 = new Player(player1Name, new AlwaysRockStrategy());
-        Player player2 = new Player(player2Name, new RandomStrategy());
-
-        Game game = new Game(player1, player2);
 
         RoundResult result = game.playRound();
 
@@ -57,9 +52,10 @@ public class GameService {
         return serverMemory.getGameStats();
     }
 
-    public void clearServerMemory() {
+    public boolean clearServerMemory() {
         logger.info("GameService.clearServerMemory() called.");
-        this.serverMemory.clear();
+        
+        return this.serverMemory.clear();
     }
 }
 
