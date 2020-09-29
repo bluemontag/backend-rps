@@ -1,5 +1,6 @@
 package com.ciklum;
 
+import com.ciklum.controller.GameController;
 import com.ciklum.model.game.ServerMemory;
 import com.ciklum.service.GameService;
 
@@ -17,6 +18,11 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+    @Bean
+    public GameController getGameController() {
+        return new GameController();
+    }
+    
     @Bean
     public GameService getGameService() {
         return new GameService();
