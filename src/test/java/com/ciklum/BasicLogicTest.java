@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.ciklum.model.player.*;
 import com.ciklum.model.game.*;
-import com.ciklum.model.element.*;
+import com.ciklum.model.shapes.Shape;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ public class BasicLogicTest {
     @Test
     public void rockBeatsScissorsTest() {
 
-        Game game = givenAGameOfPlayers(new Rock(), new Scissors());
+        Game game = givenAGameOfPlayers(Shape.ROCK, Shape.SCISSORS);
 
         RoundResult result = game.playRound();
 
@@ -38,7 +38,7 @@ public class BasicLogicTest {
     }
 
     // create test data to operate on
-    private Game givenAGameOfPlayers(Element e1, Element e2) {
+    private Game givenAGameOfPlayers(Shape e1, Shape e2) {
         // create 2 players with strategies "always e1 and always e2"
         Player p1 = new Player("Juan", () -> e1);
         Player p2 = new Player("Pedro", () -> e2);
@@ -55,7 +55,7 @@ public class BasicLogicTest {
     @Test
     public void scissorsIsBeatenByRockTest() {
 
-        Game game = givenAGameOfPlayers(new Scissors(), new Rock());
+        Game game = givenAGameOfPlayers(Shape.SCISSORS, Shape.ROCK);
 
         RoundResult result = game.playRound();
 
@@ -74,7 +74,7 @@ public class BasicLogicTest {
     @Test
     public void paperBeatsRockTest() {
 
-        Game game = givenAGameOfPlayers(new Paper(), new Rock());
+        Game game = givenAGameOfPlayers(Shape.PAPER, Shape.ROCK);
 
         RoundResult result = game.playRound();
 
@@ -86,7 +86,7 @@ public class BasicLogicTest {
     @Test
     public void rockIsBeatenByPaperTest() {
 
-        Game game = givenAGameOfPlayers(new Rock(), new Paper());
+        Game game = givenAGameOfPlayers(Shape.ROCK, Shape.PAPER);
 
         RoundResult result = game.playRound();
 
@@ -98,7 +98,7 @@ public class BasicLogicTest {
     @Test
     public void scissorsBeatsPaperTest() {
 
-        Game game = givenAGameOfPlayers(new Scissors(), new Paper());
+        Game game = givenAGameOfPlayers(Shape.SCISSORS, Shape.PAPER);
 
         RoundResult result = game.playRound();
 
@@ -110,7 +110,7 @@ public class BasicLogicTest {
     @Test
     public void paperIsBeatenByScissorsTest() {
 
-        Game game = givenAGameOfPlayers(new Paper(), new Scissors());
+        Game game = givenAGameOfPlayers(Shape.PAPER, Shape.SCISSORS);
 
         RoundResult result = game.playRound();
 
@@ -122,7 +122,7 @@ public class BasicLogicTest {
     @Test
     public void scissorsDrawTest() {
 
-        Game game = givenAGameOfPlayers(new Scissors(), new Scissors());
+        Game game = givenAGameOfPlayers(Shape.SCISSORS, Shape.SCISSORS);
 
         RoundResult result = game.playRound();
 
@@ -133,7 +133,7 @@ public class BasicLogicTest {
 
     public void papersDrawTest() {
 
-        Game game = givenAGameOfPlayers(new Paper(), new Paper());
+        Game game = givenAGameOfPlayers(Shape.PAPER, Shape.PAPER);
 
         RoundResult result = game.playRound();
 
@@ -144,7 +144,7 @@ public class BasicLogicTest {
 
     public void rocksDrawTest() {
 
-        Game game = givenAGameOfPlayers(new Rock(), new Rock());
+        Game game = givenAGameOfPlayers(Shape.ROCK, Shape.ROCK);
 
         RoundResult result = game.playRound();
 

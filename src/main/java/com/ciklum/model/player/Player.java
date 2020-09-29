@@ -1,6 +1,6 @@
 package com.ciklum.model.player;
 
-import com.ciklum.model.element.Element;
+import com.ciklum.model.shapes.Shape;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -11,11 +11,11 @@ public class Player {
     private final PlayerStrategy strategy;
 
     /**
-     * A Player must always have selected an element and a name.
+     * A Player must always have selected an shape and a name.
      * This constructor creates a Player with the default strategy: {@link RandomStrategy}
      * 
      * @param name
-     * @param element
+     * @param shape
      */
     public Player(String name) {
         this.name = name;
@@ -50,7 +50,7 @@ public class Player {
         return this.name;
     }
 
-    public Element chooseNewElement() {
+    public Shape chooseNewElement() {
         return this.strategy.chooseNewElement();
     }
 
