@@ -17,6 +17,7 @@ import com.ciklum.service.GameService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +42,7 @@ public class GameController {
 	private GameService gameService;
 	
     @PostMapping(value = "/playRound", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RoundResultVO playRound(@RequestParam(required = true) @NotBlank @Size(max = USERNAME_MAX_LEN) String userName,
+    public ResponseEntity<RoundResultVO> playRound(@RequestParam(required = true) @NotBlank @Size(max = USERNAME_MAX_LEN) String userName,
                                    @RequestParam(required = true) @NotBlank @Size(max = PLAYER_NAME_MAX_LEN) String player1Name,
                                    @RequestParam(required = true) @NotBlank @Size(max = PLAYER_NAME_MAX_LEN) String player2Name) {
 
@@ -59,7 +60,7 @@ public class GameController {
 
         RoundResult result = this.gameService.playRound(userName, game);
 
-        return result.getVO();
+        return ResponseEntity.ok(result.getVO());
     }
 
     private void validateRequiredStringParameter(String value, String name, int maxLength) {
@@ -69,7 +70,7 @@ public class GameController {
     }
 
     @GetMapping(value = "/getRoundsForUser", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RoundResultVO> getRoundsForUser(@RequestParam(required = true) @NotBlank @Size(max = USERNAME_MAX_LEN) String userName) {
+    public ResponseEntity<List<RoundResultVO>> getRoundsForUser(@RequestParam(required = true) @NotBlank @Size(max = USERNAME_MAX_LEN) String userName) {
         
         logger.info("GET /getRoundsForUser userName={}", userName);
 
@@ -78,22 +79,24 @@ public class GameController {
 
         List<RoundResult> results = this.gameService.getRoundsForUser(userName);
 
-        return results.stream().map( RoundResult::getVO ).collect(Collectors.toList());
+        List<RoundResultVO> resultsVO = results.stream().map( RoundResult::getVO ).collect(Collectors.toList());
+
+        return ResponseEntity.ok(resultsVO);
     }
 
     @GetMapping(value = "/getGameStats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public GameStats getGameStats() {
+    public ResponseEntity<GameStats> getGameStats() {
         
         logger.info("GET /getGameStats");
 
-        return this.gameService.getGameStats();
+        return ResponseEntity.ok(this.gameService.getGameStats());
     }
 
     @DeleteMapping(value = "/cleanServerMemory", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Boolean cleanServerMemory() {
+    public ResponseEntity<Boolean> cleanServerMemory() {
 
         logger.info("DELETE /cleanServerMemory");
 
-        return this.gameService.clearServerMemory();
+        return ResponseEntity.ok(gameService.clearServerMemory());
     }
 }
