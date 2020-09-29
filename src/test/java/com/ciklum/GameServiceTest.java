@@ -8,8 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import com.ciklum.model.game.Game;
 import com.ciklum.model.game.GameStats;
 import com.ciklum.model.game.RoundResult;
+import com.ciklum.model.player.Player;
 import com.ciklum.service.GameService;
 
 import org.junit.After;
@@ -47,10 +49,11 @@ public class GameServiceTest {
 
     @Test
     public void testWhenPlayRoundThenStatsAreIncremented() {
-        // given an empty game Service
-        
+        // given a game
+        Game game = givenAGameBetweenPlayer1AndPlayer2();
+
         // play one round
-        RoundResult result = gameService.playRound(userName, "Player 1", "Player 2");
+        RoundResult result = gameService.playRound(userName, game);
         
         assertStatsIncrementAccordingToResult(result);
 
@@ -80,14 +83,21 @@ public class GameServiceTest {
 
     @Test
     public void testWhenPlayRoundThenResultIsStored() {
-        // given an empty game Service
+        // given a game
+        Game game = givenAGameBetweenPlayer1AndPlayer2();
 
         // play one round
-        RoundResult result = gameService.playRound(userName, "Player 1", "Player 2");
+        RoundResult result = gameService.playRound(userName, game);
         
         assertRoundsForUserContainsResult(result, userName);
 
         logger.info("The test testWhenPlayRoundThenResultIsStored finished ok.");
+    }
+
+    private Game givenAGameBetweenPlayer1AndPlayer2() {
+        Player player1 = new Player("Player 1");
+        Player player2 = new Player("Player 2");
+        return new Game(player1, player2);
     }
 
     private void assertRoundsForUserContainsResult(RoundResult result, String userName) {
@@ -123,10 +133,11 @@ public class GameServiceTest {
 
     @Test
     public void testWhenPlayARoundAndClearMemoryThenEmptyStatsIsReturned() {
-        // given an empty game Service
+        // given a game
+        Game game = givenAGameBetweenPlayer1AndPlayer2();
 
         // When play one round
-        gameService.playRound(userName, "Player 1", "Player 2");
+        gameService.playRound(userName, game);
 
         // and clear the memory:
         gameService.clearServerMemory();

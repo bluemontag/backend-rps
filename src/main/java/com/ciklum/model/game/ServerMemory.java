@@ -75,11 +75,13 @@ public class ServerMemory {
         return new GameStats(this.totalRoundsPlayed, this.totalWinsP1, totalWinsP2, totalDraws);
     }
 
-    public void clear() {
+    public boolean clear() {
         this.games.clear();
         this.totalDraws = 0;
         this.totalRoundsPlayed = 0;
         this.totalWinsP1 = 0;
         this.totalWinsP2 = 0;
+
+        return true;
     }
 }
