@@ -1,9 +1,9 @@
 package com.ciklum.model.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The GameMemory is the memory for all the outcomes for all the different users.
@@ -23,8 +23,8 @@ public class ServerMemory {
 
 
     public ServerMemory() {
-        // begin server with empty memory map
-        this.games = new HashMap<>();
+        // begin server with empty Concurrent HashMap
+        this.games = new ConcurrentHashMap<>();
     }
 
     /**
