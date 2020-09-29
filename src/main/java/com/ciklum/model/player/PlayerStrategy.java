@@ -1,9 +1,9 @@
 package com.ciklum.model.player;
 
-import com.ciklum.model.element.Element;
+import com.ciklum.model.shapes.Shape;
 
 public interface PlayerStrategy {
 
-    public Element chooseNewElement();
+    public Shape chooseNewElement();
     
 }

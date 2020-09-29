@@ -2,7 +2,7 @@ package com.ciklum.model.game;
 
 import java.util.Optional;
 
-import com.ciklum.model.element.Element;
+import com.ciklum.model.shapes.Shape;
 import com.ciklum.model.player.Player;
 
 /**
@@ -26,57 +26,49 @@ public class Game {
     }
 
     /**
-     * Plays a round for the elements e1 and e2,
+     * Plays a round for the shapes s1 and s2,
      *  then adds the result to the server (for the current userName).
      * 
      * @return the result in case you need to test the value from the outside
      */
-    private RoundResult playRoundWithElements(Element e1, Element e2) {
+    private RoundResult playRoundWithElements(Shape s1, Shape s2) {
 
         logger.info("{} is playing with {}", this.player1.getName(), this.player2.getName());
 
-        int outcome = e1.compareTo(e2);
         RoundResult result = null;
 
-        switch (outcome) {
-            case 0:
+        if (s1 == s2) {
                 // Tie        
                 logger.info("There is a tie");
-                result = new RoundResult(e1, e2, Optional.empty(), false, false);
-                break;
-
-            case -1:
-                // The first element wins
-                logger.info("{} beats {}", e1, e2);
-                result = new RoundResult(e1, e2, Optional.of(this.player1), true, false);
-                break;
-
-            case 1:
-                // The second element wins
-                logger.info("{} beats {}", e2, e1);
-                result = new RoundResult(e1, e2, Optional.of(this.player2), false, true);
-                break;
-
-            default:
-                // raise exception or return null (there is some unexpected behaviour)
-                return null;
+                result = new RoundResult(s1, s2, Optional.empty(), false, false);
+        } else if ((s1 == Shape.ROCK && s2 == Shape.SCISSORS) ||
+                   (s1 == Shape.PAPER && s2 == Shape.ROCK) ||
+                   (s1 == Shape.SCISSORS && s2 == Shape.PAPER)
+                   ) {
+                // The first shape wins
+                logger.info("{} beats {}", s1, s2);
+                result = new RoundResult(s1, s2, Optional.of(this.player1), true, false);
+        } else {
+            // The second shape wins
+            logger.info("{} beats {}", s2, s1);
+            result = new RoundResult(s1, s2, Optional.of(this.player2), false, true);
         }
 
         return result;
     }
 
     /**
-     * Choose an element for each user, according 
+     * Choose an shape for each user, according 
      * to their selected strategies, and plays a 
      * round with those elements.
      * 
      * @return the {@link RoundResult} that corresponds with the result of the round (winner or a tie)
      */
     public RoundResult playRound() {
-        Element e1 = this.player1.chooseNewElement();
-        Element e2 = this.player2.chooseNewElement();
+        Shape s1 = this.player1.chooseNewElement();
+        Shape s2 = this.player2.chooseNewElement();
 
-        return this.playRoundWithElements(e1, e2);
+        return this.playRoundWithElements(s1, s2);
     }
 
     /**

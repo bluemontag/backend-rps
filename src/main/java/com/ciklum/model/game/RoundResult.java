@@ -2,7 +2,7 @@ package com.ciklum.model.game;
 
 import java.util.Optional;
 
-import com.ciklum.model.element.Element;
+import com.ciklum.model.shapes.Shape;
 import com.ciklum.model.player.Player;
 import com.ciklum.model.vo.RoundResultVO;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -10,15 +10,15 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RoundResult {
     
-    private final Element e1;
-    private final Element e2;
+    private final Shape s1;
+    private final Shape s2;
     private final Optional<Player> winner;
     private final boolean isPlayer1TheWinner;
     private final boolean isPlayer2TheWinner;
 
-    public RoundResult(Element e1, Element e2, Optional<Player> winner, boolean isPlayer1TheWinner, boolean isPlayer2TheWinner) {
-        this.e1 = e1;
-        this.e2 = e2;
+    public RoundResult(Shape e1, Shape e2, Optional<Player> winner, boolean isPlayer1TheWinner, boolean isPlayer2TheWinner) {
+        this.s1 = e1;
+        this.s2 = e2;
         this.winner = winner;
         this.isPlayer1TheWinner = isPlayer1TheWinner;
         this.isPlayer2TheWinner = isPlayer2TheWinner;
@@ -52,8 +52,8 @@ public class RoundResult {
         if (optWinner.isPresent()) {
             winnerString = optWinner.get().getName();
         }
-        return new RoundResultVO(e1.getElementName(),
-                                 e2.getElementName(),
+        return new RoundResultVO(s1.name(),
+                                 s2.name(),
                                  winnerString);
     }
 
@@ -61,8 +61,8 @@ public class RoundResult {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((e1 == null) ? 0 : e1.hashCode());
-        result = prime * result + ((e2 == null) ? 0 : e2.hashCode());
+        result = prime * result + ((s1 == null) ? 0 : s1.hashCode());
+        result = prime * result + ((s2 == null) ? 0 : s2.hashCode());
         result = prime * result + ( winner.hashCode() );
         return result;
     }
@@ -78,7 +78,7 @@ public class RoundResult {
 
         RoundResult other = (RoundResult) obj;
 
-        return this.e1.equals(other.e1) && this.e2.equals(other.e2) && this.winner.equals(other.winner);
+        return this.s1.equals(other.s1) && this.s2.equals(other.s2) && this.winner.equals(other.winner);
     }
 
 

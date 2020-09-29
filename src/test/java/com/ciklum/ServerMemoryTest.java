@@ -6,10 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
-import com.ciklum.model.element.Element;
-import com.ciklum.model.element.Paper;
-import com.ciklum.model.element.Rock;
-import com.ciklum.model.element.Scissors;
+import com.ciklum.model.shapes.Shape;
 import com.ciklum.model.game.Game;
 import com.ciklum.model.game.GameStats;
 import com.ciklum.model.game.RoundResult;
@@ -55,7 +52,7 @@ public class ServerMemoryTest {
     public void testWhenNRoundsArePlayedThenResultsAreStored() {
 
         // Given a game
-        Game game = givenAGameOfPlayers(new Paper(), new Scissors());
+        Game game = givenAGameOfPlayers(Shape.PAPER, Shape.SCISSORS);
 
         int nRounds = 10;
         // When
@@ -77,8 +74,8 @@ public class ServerMemoryTest {
     public void testWhenTwoDifferentUsersThenTheyDontInterfereWithEachOther() {
 
         // given 2 different games
-        Game game = givenAGameOfPlayers(new Rock(), new Paper());
-        Game game2 = givenAGameOfPlayers(new Rock(), new Scissors());
+        Game game = givenAGameOfPlayers(Shape.ROCK, Shape.PAPER);
+        Game game2 = givenAGameOfPlayers(Shape.ROCK, Shape.SCISSORS);
         
         int roundsForUser1 = 2;
         int roundsForUser2 = 3;
@@ -94,7 +91,7 @@ public class ServerMemoryTest {
     }
 
     // create test data to operate on
-    private Game givenAGameOfPlayers(Element e1, Element e2) {
+    private Game givenAGameOfPlayers(Shape e1, Shape e2) {
         // create 2 players with strategies "always e1 and always e2"
         Player p1 = new Player("Juan", () -> e1);
         Player p2 = new Player("Pedro", () -> e2);
@@ -124,7 +121,7 @@ public class ServerMemoryTest {
     public void testWhenPlayARoundThenTotalRoundsAreOk() {
 
         // Given
-        Game game = givenAGameOfPlayers(new Rock(), new Paper());
+        Game game = givenAGameOfPlayers(Shape.ROCK, Shape.PAPER);
 
         // When 5 rounds are played with user 1
         whenPlayingNRoundsWithUser(game, 5, user1);
@@ -143,17 +140,17 @@ public class ServerMemoryTest {
     public void testWhenPlayer1WinsNTimesAndPlayer2WinsMTimesThenStatsAreOk() {
 
         // Given
-        Game game = givenAGameOfPlayers(new Rock(), new Scissors());
+        Game game = givenAGameOfPlayers(Shape.ROCK, Shape.SCISSORS);
 
         // When Rock Wins 8 times
         whenPlayingNRoundsWithUser(game, 8, user1);
 
         // And Player 2 wins 7 times
-        game = givenAGameOfPlayers(new Rock(), new Paper());
+        game = givenAGameOfPlayers(Shape.ROCK, Shape.PAPER);
         whenPlayingNRoundsWithUser(game, 7, user1);
 
         // And There are 3 draws
-        game = givenAGameOfPlayers(new Paper(), new Paper());
+        game = givenAGameOfPlayers(Shape.PAPER, Shape.PAPER);
         whenPlayingNRoundsWithUser(game, 3, user1);
 
         // Then
@@ -173,7 +170,7 @@ public class ServerMemoryTest {
     public void testWhenPlayNRoundsAndClearMemoryThenStatsAreOk() {
 
         // Given
-        Game game = givenAGameOfPlayers(new Rock(), new Scissors());
+        Game game = givenAGameOfPlayers(Shape.ROCK, Shape.SCISSORS);
 
         // When Rock Wins 8 times
         whenPlayingNRoundsWithUser(game, 8, user1);
