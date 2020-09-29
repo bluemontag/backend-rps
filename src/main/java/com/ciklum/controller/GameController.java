@@ -63,7 +63,7 @@ public class GameController {
     }
 
     private void validateRequiredStringParameter(String value, String name, int maxLength) {
-        if (value != null && !value.isEmpty() && value.length() <= maxLength) {
+        if (value == null || value.isEmpty() || value.length() > maxLength) {
             throw new IllegalArgumentException("Parameter " + name + " is invalid");
         }
     }
