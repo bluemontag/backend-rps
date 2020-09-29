@@ -50,8 +50,8 @@ public class Player {
         return this.name;
     }
 
-    public Shape chooseNewElement() {
-        return this.strategy.chooseNewElement();
+    public Shape chooseNewShape() {
+        return this.getStrategy().chooseNewShape();
     }
 
     /**

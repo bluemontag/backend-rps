@@ -4,6 +4,6 @@ import com.ciklum.model.shapes.Shape;
 
 public interface PlayerStrategy {
 
-    public Shape chooseNewElement();
+    public Shape chooseNewShape();
     
 }
