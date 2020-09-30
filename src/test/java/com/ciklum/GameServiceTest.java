@@ -40,7 +40,7 @@ public class GameServiceTest {
     @Before
     public void beforeEach() {
         logger.info("==================================================================");
-        this.gameService.clearServerMemory();
+        this.gameService.clearServerMemory().join();
     }
     
     @After
@@ -54,7 +54,7 @@ public class GameServiceTest {
         Game game = givenAGameBetweenPlayer1AndPlayer2();
 
         // play one round
-        RoundResult result = gameService.playRound(userName, game);
+        RoundResult result = gameService.playRound(userName, game).join();
         
         assertStatsIncrementAccordingToResult(result);
 
@@ -62,7 +62,7 @@ public class GameServiceTest {
     }
 
     private void assertStatsIncrementAccordingToResult(RoundResult result) {
-        GameStats stats = gameService.getGameStats();
+        GameStats stats = gameService.getGameStats().join();
 
         // check the total stats
         assertEquals(1, stats.getTotalRounds());
@@ -88,7 +88,7 @@ public class GameServiceTest {
         Game game = givenAGameBetweenPlayer1AndPlayer2();
 
         // play one round
-        RoundResult result = gameService.playRound(userName, game);
+        RoundResult result = gameService.playRound(userName, game).join();
         
         assertRoundsForUserContainsResult(result, userName);
 
@@ -103,7 +103,7 @@ public class GameServiceTest {
 
     private void assertRoundsForUserContainsResult(RoundResult result, String userName) {
         
-        List<RoundResult> results = gameService.getRoundsForUser(userName);
+        List<RoundResult> results = gameService.getRoundsForUser(userName).join();
         
         assertNotEquals(null, results);
         assertFalse(results.isEmpty());
@@ -116,7 +116,7 @@ public class GameServiceTest {
         // given an empty game service
 
         // When getting game stats
-        GameStats stats = gameService.getGameStats();
+        GameStats stats = gameService.getGameStats().join();
 
         // then
         assertNonEmptyStatsWithZeroValues(stats);
@@ -138,20 +138,20 @@ public class GameServiceTest {
         Game game = givenAGameBetweenPlayer1AndPlayer2();
 
         // When play one round
-        gameService.playRound(userName, game);
+        gameService.playRound(userName, game).join();
 
         // and clear the memory:
-        gameService.clearServerMemory();
+        gameService.clearServerMemory().join();
 
         // Then
-        assertNonEmptyStatsWithZeroValues(gameService.getGameStats());
+        assertNonEmptyStatsWithZeroValues(gameService.getGameStats().join());
         assertMemoryEmpty();
 
         logger.info("The test testWhenPlayARoundAndClearMemoryThenEmptyStatsIsReturned finished ok.");
     }
 
     private void assertMemoryEmpty() {
-        List<RoundResult> results = gameService.getRoundsForUser(userName);
+        List<RoundResult> results = gameService.getRoundsForUser(userName).join();
 
         assertNotNull(results);
         assertTrue(results.isEmpty());

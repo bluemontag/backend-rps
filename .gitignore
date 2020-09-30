@@ -2,3 +2,7 @@ target/
 .vscode/
 .settings/
 .factorypath
+.bloop/bloop.settings.json
+.bloop/ciklum-rps.json
+.bloop/ciklum-rps-test.json
+.metals/metals.h2.db

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.ciklum.model.shapes.Shape;
 import com.ciklum.model.game.Game;
@@ -34,13 +35,10 @@ public class ServerMemoryTest {
     @Autowired
     private ServerMemory serverMemory;
 
-    private String user1 = "Jorge";
-    private String user2 = "Javier";
-
     @Before
     public void beforeEach() {
         logger.info("==================================================================");
-        serverMemory.clear();
+        serverMemory.clear().join();
     }
     
     @After
@@ -50,6 +48,8 @@ public class ServerMemoryTest {
 
     @Test
     public void testWhenNRoundsArePlayedThenResultsAreStored() {
+
+        String user1 = UUID.randomUUID().toString();
 
         // Given a game
         Game game = givenAGameOfPlayers(Shape.PAPER, Shape.SCISSORS);
@@ -63,7 +63,7 @@ public class ServerMemoryTest {
     }
 
     private void assertResultListHasNElements(int n, String user) {
-        List<RoundResult> results = serverMemory.getRounds(user);
+        List<RoundResult> results = serverMemory.getRounds(user).join();
 
         assertNotNull(results);
         assertFalse(results.isEmpty());
@@ -72,6 +72,9 @@ public class ServerMemoryTest {
 
     @Test
     public void testWhenTwoDifferentUsersThenTheyDontInterfereWithEachOther() {
+        
+        String user1 = UUID.randomUUID().toString();
+        String user2 = UUID.randomUUID().toString();
 
         // given 2 different games
         Game game = givenAGameOfPlayers(Shape.ROCK, Shape.PAPER);
@@ -106,20 +109,21 @@ public class ServerMemoryTest {
             // play a round
             RoundResult result = game.playRound();
             // add result to memory
-            serverMemory.addNewResult(user, result);
+            serverMemory.addNewResult(user, result).join();
         }
     }
 
     private void assertNRoundsForUser(int roundsForUser, String userName) {
         assertResultListHasNElements(roundsForUser, userName);
 
-        int rounds = serverMemory.getRoundsPlayedForUser(userName);
+        int rounds = serverMemory.getRoundsPlayedForUser(userName).join();
         assertEquals(roundsForUser, rounds);
     }
 
     @Test
     public void testWhenPlayARoundThenTotalRoundsAreOk() {
-
+        String user1 = UUID.randomUUID().toString();
+        String user2 = UUID.randomUUID().toString();
         // Given
         Game game = givenAGameOfPlayers(Shape.ROCK, Shape.PAPER);
 
@@ -133,11 +137,12 @@ public class ServerMemoryTest {
     }
 
     private void assertTotalRoundsAre(int n) {
-        assertEquals(n, serverMemory.getGameStats().getTotalRounds());
+        assertEquals(n, serverMemory.getGameStats().join().getTotalRounds());
     }
 
     @Test
     public void testWhenPlayer1WinsNTimesAndPlayer2WinsMTimesThenStatsAreOk() {
+        String user1 = UUID.randomUUID().toString();
 
         // Given
         Game game = givenAGameOfPlayers(Shape.ROCK, Shape.SCISSORS);
@@ -158,7 +163,7 @@ public class ServerMemoryTest {
     }
 
     private void assertStatsAreOk(int winsForPlayer1, int winsForPlayer2, int draws) {
-        GameStats stats = serverMemory.getGameStats();
+        GameStats stats = serverMemory.getGameStats().join();
 
         assertEquals(winsForPlayer1, stats.getTotalWinsP1());
         assertEquals(winsForPlayer2, stats.getTotalWinsP2());
@@ -168,7 +173,8 @@ public class ServerMemoryTest {
 
     @Test
     public void testWhenPlayNRoundsAndClearMemoryThenStatsAreOk() {
-
+        String user1 = UUID.randomUUID().toString();
+        
         // Given
         Game game = givenAGameOfPlayers(Shape.ROCK, Shape.SCISSORS);
 
@@ -176,7 +182,7 @@ public class ServerMemoryTest {
         whenPlayingNRoundsWithUser(game, 8, user1);
 
         // And clear memory
-        serverMemory.clear();
+        serverMemory.clear().join();
         
         // Then
         assertStatsAreOk(0, 0, 0);
