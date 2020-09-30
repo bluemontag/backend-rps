@@ -1,6 +1,7 @@
 package com.ciklum.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.ciklum.model.game.Game;
 import com.ciklum.model.game.ServerMemory;
@@ -25,30 +26,28 @@ public class GameService {
      * @param player2Name
      * @return
      */
-    public RoundResult playRound(String userName, Game game) {
+    public CompletableFuture<RoundResult> playRound(String userName, Game game) {
 
         logger.info("GameService.playRound() called.");
 
         RoundResult result = game.playRound();
 
-        this.serverMemory.addNewResult(userName, result);
-
-        return result;
+        return this.serverMemory.addNewResult(userName, result).thenApply( voidResult -> result);
     }
 
-    public List<RoundResult> getRoundsForUser(String userName) {
+    public CompletableFuture<List<RoundResult>> getRoundsForUser(String userName) {
 
         logger.info("GameService.getRoundsForUser() called.");
         return serverMemory.getRounds(userName);
     }
 
-    public GameStats getGameStats() {
+    public CompletableFuture<GameStats> getGameStats() {
         
         logger.info("GameService.getGameStats() called.");
         return serverMemory.getGameStats();
     }
 
-    public boolean clearServerMemory() {
+    public CompletableFuture<Boolean> clearServerMemory() {
         logger.info("GameService.clearServerMemory() called.");
         
         return this.serverMemory.clear();

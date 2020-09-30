@@ -11,6 +11,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import com.ciklum.controller.GameController;
 import com.ciklum.model.game.Game;
@@ -21,7 +23,6 @@ import com.ciklum.model.shapes.Shape;
 import com.ciklum.model.vo.RoundResultVO;
 import com.ciklum.service.GameService;
 
-import org.apache.catalina.connector.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,9 +70,10 @@ public class GameControllerTest {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
          
         when(gameService.playRound(any(String.class), any(Game.class))).thenReturn(
-            new RoundResult(Shape.ROCK, Shape.SCISSORS, Optional.of(new Player("Jacinto")), true, false));
-         
-        ResponseEntity<RoundResultVO> responseEntity = gameController.playRound("Matias", "Juan", "Pedro");
+            CompletableFuture.completedFuture(new RoundResult(Shape.ROCK, Shape.SCISSORS, Optional.of(new Player("Jacinto")), true, false)));
+        
+        String user1 = UUID.randomUUID().toString();
+        ResponseEntity<RoundResultVO> responseEntity = gameController.playRound(user1, "Juan", "Pedro");
          
         assertResultOk(responseEntity);
 
@@ -94,7 +96,7 @@ public class GameControllerTest {
         
         // When playing one round
         when(gameService.playRound(any(String.class), any(Game.class))).thenReturn(
-            new RoundResult(Shape.ROCK, Shape.SCISSORS, Optional.of(new Player("Jacinto")), true, false));
+            CompletableFuture.completedFuture(new RoundResult(Shape.ROCK, Shape.SCISSORS, Optional.of(new Player("Jacinto")), true, false)));
         
         // Then code throws exception
         assertCodeThrowsIllegalArgumentException(gameController);
@@ -127,9 +129,11 @@ public class GameControllerTest {
         // When getting rounds for user
         List<RoundResult> mockedResult = new ArrayList<>();
         mockedResult.add(new RoundResult(Shape.ROCK, Shape.SCISSORS, Optional.of(new Player("Jacinto")), true, false));
-        when(gameService.getRoundsForUser(any(String.class))).thenReturn(mockedResult);
+
+        when(gameService.getRoundsForUser(any(String.class))).thenReturn(CompletableFuture.completedFuture(mockedResult));
         
-        ResponseEntity<List<RoundResultVO>> responseEntity = gameController.getRoundsForUser("Ignacio");
+        String user1 = UUID.randomUUID().toString();
+        ResponseEntity<List<RoundResultVO>> responseEntity = gameController.getRoundsForUser(user1);
 
         // Then
         assertResultsHasOneElement(responseEntity);
@@ -154,7 +158,7 @@ public class GameControllerTest {
         
         // When getting rounds for user
         GameStats mockedResult = new GameStats(0L, 0L, 0L, 0L);
-        when(gameService.getGameStats()).thenReturn(mockedResult);
+        when(gameService.getGameStats()).thenReturn(CompletableFuture.completedFuture(mockedResult));
         
         ResponseEntity<GameStats> responseEntity = gameController.getGameStats();
 
@@ -178,7 +182,7 @@ public class GameControllerTest {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         
         // When getting rounds for user
-        when(gameService.clearServerMemory()).thenReturn(true);
+        when(gameService.clearServerMemory()).thenReturn(CompletableFuture.completedFuture(true));
         
         ResponseEntity<Boolean> responseEntity = gameController.cleanServerMemory();
 

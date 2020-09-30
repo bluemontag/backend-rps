@@ -71,17 +71,11 @@ public class GameStats {
             return false;
         if (getClass() != obj.getClass())
             return false;
+        
         GameStats other = (GameStats) obj;
-        if (totalDraws != other.totalDraws)
-            return false;
-        if (totalRounds != other.totalRounds)
-            return false;
-        if (totalWinsP1 != other.totalWinsP1)
-            return false;
-        if (totalWinsP2 != other.totalWinsP2)
-            return false;
-        return true;
+        
+        return (totalDraws == other.totalDraws) && (totalRounds == other.totalRounds) &&
+               (totalWinsP1 == other.totalWinsP1) && (totalWinsP2 == other.totalWinsP2);
     }
-
     
 }
