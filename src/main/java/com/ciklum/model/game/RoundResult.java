@@ -38,10 +38,6 @@ public class RoundResult {
         return this.isPlayer1TheWinner;
     }
 
-    public boolean isPlayer2Winner() {
-        return this.isPlayer2TheWinner;
-    }
-
     public boolean isDraw() {
         return !this.isPlayer1TheWinner && !this.isPlayer2TheWinner;
     }

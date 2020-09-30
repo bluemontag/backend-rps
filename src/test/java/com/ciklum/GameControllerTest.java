@@ -21,7 +21,6 @@ import com.ciklum.model.shapes.Shape;
 import com.ciklum.model.vo.RoundResultVO;
 import com.ciklum.service.GameService;
 
-import org.apache.catalina.connector.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
