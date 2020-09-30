@@ -1,6 +1,7 @@
 package com.ciklum.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
@@ -40,7 +41,15 @@ public class GameController {
 
 	@Autowired
 	private GameService gameService;
-	
+    
+    /**
+     * Plays a round of Rock-Paper-Scissors in this Game Server,
+     * for the provided userName, 
+     * @param userName
+     * @param player1Name
+     * @param player2Name
+     * @return
+     */
     @PostMapping(value = "/playRound", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RoundResultVO> playRound(@RequestParam(required = true) @NotBlank @Size(max = USERNAME_MAX_LEN) String userName,
                                    @RequestParam(required = true) @NotBlank @Size(max = PLAYER_NAME_MAX_LEN) String player1Name,
@@ -53,20 +62,34 @@ public class GameController {
         validateRequiredStringParameter(player1Name, "player1Name", PLAYER_NAME_MAX_LEN);
         validateRequiredStringParameter(player2Name, "player2Name", PLAYER_NAME_MAX_LEN);
 
-        Player player1 = new Player(player1Name, new AlwaysRockStrategy());
-        Player player2 = new Player(player2Name, new RandomStrategy());
+        // once the parameters are validated, create objects and call the service
+        Game game = createGameWithSpecifiedStrategies(player1Name, player2Name);
+        
+        CompletableFuture<RoundResultVO> result =
+          this.gameService.playRound(userName, game).thenApply( RoundResult::getVO );
 
-        Game game = new Game(player1, player2);
-
-        RoundResult result = this.gameService.playRound(userName, game);
-
-        return ResponseEntity.ok(result.getVO());
+        return ResponseEntity.ok(result.join());
     }
 
     private void validateRequiredStringParameter(String value, String name, int maxLength) {
         if (value == null || value.isEmpty() || value.length() > maxLength) {
             throw new IllegalArgumentException("Parameter " + name + " is invalid");
         }
+    }
+
+    /**
+     * Creates a new game instance, with the 2 specified players and their Strategies
+     * (specified in the problem statement).
+     * 
+     * @param player1Name string name for player 1
+     * @param player2Name string name for player 2
+     * @return a new Game
+     */
+    private Game createGameWithSpecifiedStrategies(String player1Name, String player2Name) {
+        Player player1 = new Player(player1Name, new AlwaysRockStrategy());
+        Player player2 = new Player(player2Name, new RandomStrategy());
+
+        return new Game(player1, player2);
     }
 
     @GetMapping(value = "/getRoundsForUser", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,11 +100,12 @@ public class GameController {
         // Recomended by the book "Clean Code"
         validateRequiredStringParameter(userName, "userName", USERNAME_MAX_LEN);
 
-        List<RoundResult> results = this.gameService.getRoundsForUser(userName);
+        CompletableFuture<List<RoundResult>> roundResults = this.gameService.getRoundsForUser(userName);
 
-        List<RoundResultVO> resultsVO = results.stream().map( RoundResult::getVO ).collect(Collectors.toList());
+        CompletableFuture<List<RoundResultVO>> resultsVO =
+           roundResults.thenApply( list -> list.stream().map( RoundResult::getVO ).collect(Collectors.toList())  );
 
-        return ResponseEntity.ok(resultsVO);
+        return ResponseEntity.ok(resultsVO.join());
     }
 
     @GetMapping(value = "/getGameStats", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -89,7 +113,7 @@ public class GameController {
         
         logger.info("GET /getGameStats");
 
-        return ResponseEntity.ok(this.gameService.getGameStats());
+        return ResponseEntity.ok(this.gameService.getGameStats().join());
     }
 
     @DeleteMapping(value = "/cleanServerMemory", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -97,6 +121,6 @@ public class GameController {
 
         logger.info("DELETE /cleanServerMemory");
 
-        return ResponseEntity.ok(gameService.clearServerMemory());
+        return ResponseEntity.ok(gameService.clearServerMemory().join());
     }
 }
